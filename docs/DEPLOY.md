@@ -2,7 +2,7 @@
 
 Выкатка, откат и то, что нужно завести на сервере один раз.
 
-> **Адрес:** https://healthai.avavion.ru
+> **Адрес:** https://app.avavion.ru
 > **Сервер:** тот же, что у API — VPS senko.digital (Германия), docker compose
 > **Реестр образов:** ghcr.io/avavion/health-ai-frontend
 > **Пайплайн:** [.github/workflows](../.github/workflows)
@@ -78,8 +78,16 @@ Blue/green: на сервере живут два поколения сайта,
 ### 2.1 Каталог
 
 ```bash
-sudo mkdir -p /opt/health-ai-web && sudo chown "$USER" /opt/health-ai-web
+# Тот же пользователь, что выкатывает API: под ним ходит SSH из workflow.
+DEPLOY_USER="$(stat -c '%U' /opt/health-ai)"
+
+sudo mkdir -p /opt/health-ai-web
+sudo chown "$DEPLOY_USER" /opt/health-ai-web
 ```
+
+Владелец важен: если каталог принадлежит одному пользователю, а SSH приходит
+под другим, выкатка не сможет ни распаковать в него файлы, ни переписать
+адрес живого цвета — и узнается это в середине выкатки.
 
 Дальше запустите Deploy в GitHub Actions — он привезёт скрипты и шаблоны.
 Первая выкатка упрётся в отсутствие `.env`, и это нормально: заполните файлы
@@ -121,7 +129,7 @@ sudo ss -ltnp 'sport = :3111'
 
 ```bash
 sudo touch /etc/caddy/health-web-upstream.conf
-sudo chown "$USER" /etc/caddy/health-web-upstream.conf
+sudo chown "$DEPLOY_USER" /etc/caddy/health-web-upstream.conf
 ```
 
 Это единственное, что скрипт пишет за пределами своего каталога.
@@ -146,8 +154,10 @@ API и соседние сайты при ошибке не страдают.
 
 ### 2.6 Домен и CORS
 
-- A-запись `healthai.avavion.ru` на тот же адрес, что и `health-api`.
-  Сертификат Caddy выпустит сам при первом обращении.
+- A-запись `app.avavion.ru` на тот же адрес, что и `health-api`.
+  Сертификат Caddy выпустит сам при первом обращении — но только после того,
+  как домен начнёт резолвиться сюда: до этого ACME будет получать отказ и
+  повторять попытки в журнале Caddy.
 - Домен сайта добавьте в `CORS_ORIGINS` в `/opt/health-ai/app.env` бэкенда
   (§16.3) и перевыкатите API. Сайт ходит в API своим сервером, и для основной
   работы CORS ему не нужен; список нужен там, где запрос делает сама страница.
