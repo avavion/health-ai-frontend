@@ -1,6 +1,6 @@
-# Выкатка сайта: образ собирается здесь, контейнер поднимает
-# deploy/prod/deploy.sh на сервере. Раскладка сервера и список секретов —
-# в docs/DEPLOY.md.
+# Выкатка сайта: образ собирается здесь, цвета переключает
+# deploy/prod/deploy.sh на сервере. Схема та же, что у API. Раскладка
+# сервера и список секретов — в docs/DEPLOY.md.
 name: Deploy
 
 on:
@@ -8,7 +8,7 @@ on:
     tags: ["v*"]
   workflow_dispatch:
 
-# Две выкатки одновременно перезаписывали бы images.env наперегонки.
+# Две выкатки одновременно переключали бы цвета наперегонки.
 concurrency:
   group: deploy-production
   cancel-in-progress: false
@@ -112,7 +112,8 @@ jobs:
           # caddy-site.conf едет справочно: секцию для хостового Caddy заводят
           # один раз под root, выкатка её не применяет.
           tar -czf - -C deploy/prod \
-              docker-compose.yml caddy-site.conf deploy.sh \
+              docker-compose.yml caddy-site.conf \
+              common.sh deploy.sh rollback.sh \
               env.example site.env.example \
             | ssh -i ~/.ssh/id_deploy -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
                 "mkdir -p /opt/health-ai-web && tar -xzf - -C /opt/health-ai-web && chmod +x /opt/health-ai-web/*.sh"
@@ -130,14 +131,14 @@ jobs:
             "$SSH_USER@$SSH_HOST" \
             "docker login ghcr.io -u ${{ github.actor }} --password-stdin"
 
-      - name: Подъём контейнера
+      - name: Переключение цвета
         env:
           SSH_HOST: ${{ secrets.SSH_HOST }}
           SSH_USER: ${{ secrets.SSH_USER }}
           SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
         run: |
           ssh -i ~/.ssh/id_deploy -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
-            "/opt/health-ai-web/deploy.sh --image '${{ needs.image.outputs.image }}'"
+            "/opt/health-ai-web/deploy.sh --image '${{ needs.image.outputs.image }}' --version '${{ needs.image.outputs.version }}'"
 
       - name: Что выкачено
         if: always()

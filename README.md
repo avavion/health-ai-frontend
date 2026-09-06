@@ -134,7 +134,7 @@ src/
     markdown.ts             разбор правового Markdown (порт парсера iOS)
   styles/                   classical.css (как есть), тёмная тема, глобальные сбросы
 public/                     иконки и манифест
-deploy/prod/                compose, секция Caddy и скрипт выкатки
+deploy/prod/                blue/green: compose, секция Caddy, выкатка и откат
 docs/
   DEPLOY.md                 раскладка сервера, выкатка и откат
   BACKEND-REQUEST.md        сводный запрос в бэкенд (выполнен)

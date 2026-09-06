@@ -119,5 +119,9 @@ async function ensureAccessToken(request: NextRequest, deviceId: string): Promis
 export const config = {
   // Статика и файлы с расширением проходят мимо: им не нужны ни локаль, ни
   // сессия, а лишний обмен токена на favicon.ico — это лишний обмен токена.
-  matcher: ['/((?!_next|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)'],
+  //
+  // api/health исключён отдельно: по нему выкатка решает, поднялся ли сайт,
+  // и ответ на этот вопрос не должен зависеть ни от сессии, ни от доступности
+  // API — иначе новый цвет объявлялся бы больным из-за чужой поломки.
+  matcher: ['/((?!_next|api/health|favicon.ico|robots.txt|sitemap.xml|.*\\..*).*)'],
 };
