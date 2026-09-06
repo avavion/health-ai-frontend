@@ -1,0 +1,105 @@
+/* Единственный тёмный блок на странице: колофон-полоса из Classical.
+   Цвета заданы литералами — полоса тёмная в обеих темах. */
+.band {
+  position: relative;
+  overflow: hidden;
+  background: #16140f;
+  color: #f3f2f2;
+}
+
+.ghost {
+  position: absolute;
+  right: 2%;
+  top: 50%;
+  transform: translateY(-50%);
+  font-family: var(--font-heading);
+  font-weight: 300;
+  font-size: clamp(220px, 30vw, 420px);
+  line-height: 0.8;
+  color: rgba(182, 130, 53, 0.13);
+  pointer-events: none;
+}
+
+.inner {
+  position: relative;
+  padding-block: 76px;
+}
+
+.kicker {
+  margin: 0;
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: rgba(243, 242, 242, 0.6);
+}
+
+.title {
+  font-weight: 300;
+  font-size: clamp(38px, 6vw, 66px);
+  line-height: 1.03;
+  letter-spacing: -0.02em;
+  margin: 14px 0 0;
+  max-width: 20ch;
+}
+
+.lead {
+  font-size: 16.5px;
+  line-height: 1.7;
+  max-width: 50ch;
+  margin: var(--space-4) 0 0;
+  color: rgba(243, 242, 242, 0.82);
+}
+
+.grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(210px, 1fr));
+  margin: var(--space-8) 0 0;
+  border-top: 1px solid rgba(243, 242, 242, 0.22);
+}
+
+.item {
+  padding: 18px 0;
+  border-bottom: 1px solid rgba(243, 242, 242, 0.22);
+}
+
+.item + .item {
+  padding-left: var(--space-6);
+  border-left: 1px solid rgba(243, 242, 242, 0.22);
+}
+
+.itemTitle {
+  font-family: var(--font-heading);
+  font-size: 20px;
+  margin-bottom: 4px;
+}
+
+.itemBody {
+  margin: 0;
+  font-size: 13.5px;
+  line-height: 1.6;
+  color: rgba(243, 242, 242, 0.7);
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: var(--space-8);
+}
+
+.cta {
+  color: #e1ad66;
+  border-color: #b68235;
+  min-height: 46px;
+  padding-inline: 22px;
+}
+
+.cta:hover {
+  background: rgba(182, 130, 53, 0.16);
+}
+
+.meta {
+  font-size: 13px;
+  color: rgba(243, 242, 242, 0.6);
+}

@@ -1,0 +1,79 @@
+.strip {
+  display: flex;
+  align-items: center;
+  gap: 2px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  padding: 2px;
+}
+
+.arrow {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  width: 34px;
+  height: 34px;
+  flex: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  color: inherit;
+}
+
+.arrow:hover:not(:disabled) {
+  background: var(--color-accent-100);
+}
+
+.arrow:disabled {
+  opacity: 0.3;
+  cursor: default;
+}
+
+.cell {
+  appearance: none;
+  background: transparent;
+  border: 0;
+  border-radius: 3px;
+  padding: 5px 10px 6px;
+  min-width: 52px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1px;
+  cursor: pointer;
+  font-family: var(--font-body);
+  color: inherit;
+}
+
+.cell:hover {
+  background: var(--color-accent-100);
+}
+
+.cell[aria-pressed='true'] {
+  box-shadow: inset 0 0 0 1px var(--color-accent);
+}
+
+.num {
+  font-size: 15px;
+  line-height: 1.1;
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+}
+
+.cell[aria-pressed='true'] .num {
+  color: var(--color-accent-700);
+}
+
+.weekday {
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  color: color-mix(in srgb, var(--color-text) 45%, transparent);
+}
+
+/* День без записей виден по ленте: именно с вопросом «где я пропустил»
+   в неё чаще всего и лезут. */
+.cell[data-empty='true'] .num,
+.cell[data-empty='true'] .weekday {
+  color: color-mix(in srgb, var(--color-text) 34%, transparent);
+}

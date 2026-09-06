@@ -1,0 +1,148 @@
+# Выкатка сайта: образ собирается здесь, контейнер поднимает
+# deploy/prod/deploy.sh на сервере. Раскладка сервера и список секретов —
+# в docs/DEPLOY.md.
+name: Deploy
+
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch:
+
+# Две выкатки одновременно перезаписывали бы images.env наперегонки.
+concurrency:
+  group: deploy-production
+  cancel-in-progress: false
+
+jobs:
+  image:
+    name: Образ
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
+    outputs:
+      image: ${{ steps.meta.outputs.image }}
+      version: ${{ steps.meta.outputs.version }}
+
+    steps:
+      - uses: actions/checkout@v4
+
+      # Тег образа — всегда короткий sha: он неизменен, и на сервере видно,
+      # какой именно коммит крутится. Человеческий тег добавляется рядом.
+      - id: meta
+        name: Версия и тег образа
+        run: |
+          short=$(git rev-parse --short HEAD)
+          repo=$(echo "${{ github.repository }}" | tr '[:upper:]' '[:lower:]')
+
+          if [ "${{ github.ref_type }}" = "tag" ]; then
+            version="${{ github.ref_name }}"
+            tags="ghcr.io/$repo:sha-$short,ghcr.io/$repo:${{ github.ref_name }},ghcr.io/$repo:latest"
+          else
+            version="sha-$short"
+            tags="ghcr.io/$repo:sha-$short"
+          fi
+
+          echo "version=$version" >> "$GITHUB_OUTPUT"
+          echo "image=ghcr.io/$repo:sha-$short" >> "$GITHUB_OUTPUT"
+          echo "tags=$tags" >> "$GITHUB_OUTPUT"
+
+      - uses: docker/setup-buildx-action@v3
+
+      - uses: docker/login-action@v3
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      # Переменные NEXT_PUBLIC_* Next подставляет в код на сборке, а не читает
+      # при старте, поэтому они уезжают аргументами сборки, а не в site.env.
+      # Секретов среди них нет: адрес сайта, почта поддержки и версия.
+      - uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ steps.meta.outputs.tags }}
+          build-args: |
+            NEXT_PUBLIC_SITE_URL=${{ vars.SITE_URL || 'https://healthai.avavion.ru' }}
+            NEXT_PUBLIC_SUPPORT_EMAIL=${{ vars.SUPPORT_EMAIL || 'support@healthai.app' }}
+            NEXT_PUBLIC_APP_VERSION=${{ steps.meta.outputs.version }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+  deploy:
+    name: Выкатка
+    needs: image
+    runs-on: ubuntu-latest
+    # Окружение production в настройках репозитория держит ручное
+    # подтверждение и адрес сайта. Без него выкатка уезжала бы по тегу молча,
+    # а тег ставят и по ошибке.
+    environment:
+      name: production
+      url: https://healthai.avavion.ru
+    permissions:
+      contents: read
+      packages: read
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Ключ доступа к серверу
+        env:
+          SSH_KEY: ${{ secrets.SSH_KEY }}
+          SSH_KNOWN_HOSTS: ${{ secrets.SSH_KNOWN_HOSTS }}
+        run: |
+          mkdir -p ~/.ssh && chmod 700 ~/.ssh
+          printf '%s\n' "$SSH_KEY" > ~/.ssh/id_deploy
+          chmod 600 ~/.ssh/id_deploy
+          # Отпечаток сервера сверяется, а не принимается на веру: иначе
+          # подменённый DNS увёл бы выкатку вместе с ключом к чужой машине.
+          printf '%s\n' "$SSH_KNOWN_HOSTS" > ~/.ssh/known_hosts
+          chmod 600 ~/.ssh/known_hosts
+
+      - name: Скрипты выкатки на сервер
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+        run: |
+          # Конфигурация версионируется вместе с кодом; секреты и состояние
+          # (.env, site.env, images.env) живут только на сервере.
+          #
+          # caddy-site.conf едет справочно: секцию для хостового Caddy заводят
+          # один раз под root, выкатка её не применяет.
+          tar -czf - -C deploy/prod \
+              docker-compose.yml caddy-site.conf deploy.sh \
+              env.example site.env.example \
+            | ssh -i ~/.ssh/id_deploy -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+                "mkdir -p /opt/health-ai-web && tar -xzf - -C /opt/health-ai-web && chmod +x /opt/health-ai-web/*.sh"
+
+      - name: Доступ сервера к реестру образов
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+          GHCR_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          # Токен живёт до конца прогона и уходит по stdin, а не аргументом:
+          # аргументы видны в списке процессов сервера.
+          printf '%s' "$GHCR_TOKEN" | ssh -i ~/.ssh/id_deploy -p "$SSH_PORT" \
+            "$SSH_USER@$SSH_HOST" \
+            "docker login ghcr.io -u ${{ github.actor }} --password-stdin"
+
+      - name: Подъём контейнера
+        env:
+          SSH_HOST: ${{ secrets.SSH_HOST }}
+          SSH_USER: ${{ secrets.SSH_USER }}
+          SSH_PORT: ${{ secrets.SSH_PORT || '22' }}
+        run: |
+          ssh -i ~/.ssh/id_deploy -p "$SSH_PORT" "$SSH_USER@$SSH_HOST" \
+            "/opt/health-ai-web/deploy.sh --image '${{ needs.image.outputs.image }}'"
+
+      - name: Что выкачено
+        if: always()
+        run: |
+          echo "### Выкатка ${{ needs.image.outputs.version }}" >> "$GITHUB_STEP_SUMMARY"
+          echo "" >> "$GITHUB_STEP_SUMMARY"
+          echo "Образ: \`${{ needs.image.outputs.image }}\`" >> "$GITHUB_STEP_SUMMARY"
+          echo "Результат: ${{ job.status }}" >> "$GITHUB_STEP_SUMMARY"

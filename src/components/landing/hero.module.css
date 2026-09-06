@@ -1,0 +1,82 @@
+.hero {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+  gap: var(--space-12, 56px);
+  align-items: center;
+  padding-block: 76px 84px;
+}
+
+.copy > * {
+  animation: rise 0.7s both;
+}
+
+.rise {
+  animation: rise 0.7s both;
+}
+
+.copy > :nth-child(2) {
+  animation-delay: 0.08s;
+}
+.copy > :nth-child(3) {
+  animation-delay: 0.16s;
+}
+.copy > :nth-child(4) {
+  animation-delay: 0.22s;
+}
+.copy > :nth-child(5) {
+  animation-delay: 0.3s;
+}
+.copy > :nth-child(6) {
+  animation-delay: 0.38s;
+}
+
+.title {
+  font-weight: 400;
+  font-size: clamp(38px, 5.4vw, 64px);
+  line-height: 1.04;
+  letter-spacing: -0.02em;
+  margin: 16px 0 0;
+  text-wrap: pretty;
+}
+
+.accent {
+  color: var(--color-accent-700);
+}
+
+.lead {
+  font-size: 17px;
+  line-height: 1.65;
+  margin: 0;
+  max-width: 44ch;
+  text-wrap: pretty;
+}
+
+.actions {
+  display: flex;
+  gap: 12px;
+  flex-wrap: wrap;
+  margin-top: var(--space-6);
+}
+
+.actions .btn {
+  min-height: 44px;
+  padding-inline: 20px;
+}
+
+.note {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: var(--space-4) 0 0;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+}
+
+@keyframes rise {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}

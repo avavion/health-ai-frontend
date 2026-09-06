@@ -1,0 +1,39 @@
+/* Тёмная тема. Токены Classical переопределяются под тот же ground,
+   что в iOS-приложении: #12110e / #f3f2f2 / акцент #e1ad66.
+   Ставится на <html data-theme="dark">, ничего кроме переменных не трогаем. */
+[data-theme='dark'] {
+  --color-bg: #12110e;
+  --color-surface: #1b1913;
+  --color-text: #f3f2f2;
+  --color-accent: #e1ad66;
+  --color-accent-2: #e1ad66;
+  --color-divider: rgba(243, 242, 242, 0.18);
+
+  --color-neutral-100: #1e1c18;
+  --color-neutral-200: #262319;
+  --color-neutral-300: #322e26;
+  --color-neutral-500: #6d6659;
+  --color-neutral-700: #b3aa9b;
+  --color-neutral-800: #d5cdc0;
+  --color-neutral-900: #f3f2f2;
+
+  --color-accent-100: rgba(182, 130, 53, 0.14);
+  --color-accent-200: rgba(182, 130, 53, 0.22);
+  --color-accent-300: #8a6a33;
+  --color-accent-400: #c9974d;
+  --color-accent-500: #d9a559;
+  --color-accent-600: #edbd7c;
+  --color-accent-700: #e1ad66;
+  --color-accent-800: #f0cf9c;
+  --color-accent-900: #f7e3c4;
+
+  --color-accent-2-100: rgba(182, 130, 53, 0.14);
+  --color-accent-2-700: #e1ad66;
+  --color-accent-2-800: #f0cf9c;
+
+  --shadow-sm: 0 1px 2px rgba(0, 0, 0, 0.4);
+  --shadow-md: 0 2px 10px rgba(0, 0, 0, 0.45);
+  --shadow-lg: 0 8px 28px rgba(0, 0, 0, 0.5);
+
+  color-scheme: dark;
+}

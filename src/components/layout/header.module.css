@@ -1,0 +1,81 @@
+.bar {
+  position: sticky;
+  top: 0;
+  z-index: 9;
+  background: var(--color-bg);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.inner {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+  padding-block: 14px;
+}
+
+.brand {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-family: var(--font-heading);
+  font-weight: var(--font-heading-weight);
+  font-size: 19px;
+  letter-spacing: -0.01em;
+  color: var(--color-text);
+  text-decoration: none;
+  margin-right: auto;
+}
+
+/* Иконка приложения: тот же знак, что в App Store. Скругление — как у iOS. */
+.mark {
+  width: 28px;
+  height: 28px;
+  border-radius: 6px;
+}
+
+.nav {
+  display: flex;
+  gap: var(--space-4);
+  flex-wrap: wrap;
+}
+
+.nav a {
+  font-size: 14px;
+  color: var(--color-text);
+  text-decoration: none;
+}
+
+.nav a:hover {
+  color: var(--color-accent-700);
+}
+
+.tools {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+}
+
+.lang {
+  font-size: 12.5px;
+  letter-spacing: 0.08em;
+  color: color-mix(in srgb, var(--color-text) 65%, transparent);
+  text-decoration: none;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.lang:hover {
+  color: var(--color-accent-700);
+  border-color: var(--color-accent);
+}
+
+@media (max-width: 720px) {
+  .brand {
+    margin-right: 0;
+  }
+  .nav {
+    order: 3;
+    width: 100%;
+    gap: var(--space-3);
+  }
+}

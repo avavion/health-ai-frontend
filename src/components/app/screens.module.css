@@ -1,0 +1,319 @@
+.columns {
+  display: flex;
+  gap: var(--space-8);
+  flex-wrap: wrap;
+  align-items: flex-start;
+}
+
+.wide {
+  flex: 1 1 460px;
+  min-width: 0;
+}
+
+.side {
+  flex: 1 1 300px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.panel {
+  padding: 20px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+}
+
+.panelHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 10px;
+  margin-bottom: 12px;
+}
+
+.panelKicker {
+  margin: 0;
+  color: var(--color-accent);
+}
+
+.panelNote {
+  margin: 12px 0 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-text) 52%, transparent);
+}
+
+.sectionLabel {
+  margin: 0 0 12px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-divider);
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+
+/* Кольцо калорий и полосы БЖУ */
+.dayHead {
+  display: flex;
+  gap: var(--space-6);
+  flex-wrap: wrap;
+  align-items: center;
+  padding-bottom: var(--space-5);
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.ringWrap {
+  position: relative;
+  width: 132px;
+  height: 132px;
+  flex: none;
+}
+
+.ring {
+  width: 132px;
+  height: 132px;
+  transform: rotate(-90deg);
+}
+
+.ringTrack {
+  fill: none;
+  stroke: var(--color-divider);
+  stroke-width: 1.5;
+}
+
+.ringValue {
+  fill: none;
+  stroke: var(--color-accent);
+  stroke-width: 1.5;
+  stroke-dasharray: 277;
+  transition: stroke-dashoffset 0.6s cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+.ringLabel {
+  position: absolute;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.ringNumber {
+  font-family: var(--font-heading);
+  font-size: 34px;
+  line-height: 1;
+}
+
+.ringUnit {
+  font-size: 10px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+  margin-top: 3px;
+}
+
+.macros {
+  flex: 1 1 220px;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 13px;
+  margin: 0;
+}
+
+.macroHead {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  margin-bottom: 5px;
+}
+
+.macroHead dt,
+.macroHead dd {
+  margin: 0;
+}
+
+.macroHead dd {
+  white-space: nowrap;
+}
+
+.over {
+  color: var(--color-accent-700);
+}
+
+.track {
+  height: 2px;
+  background: var(--color-divider);
+}
+
+.fill {
+  height: 2px;
+  background: var(--color-accent);
+  transform-origin: left;
+  animation: grow 0.6s both;
+}
+
+.remain {
+  display: flex;
+  justify-content: space-between;
+  font-size: 13px;
+  padding-top: 11px;
+  border-top: 1px solid var(--color-divider);
+}
+
+.remainValue {
+  color: var(--color-accent-700);
+  white-space: nowrap;
+}
+
+/* Приёмы пищи */
+.meal {
+  padding: 14px 0;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.mealHead {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  gap: 12px;
+}
+
+.mealType {
+  font-family: var(--font-heading);
+  font-size: 19px;
+}
+
+.mealTime {
+  font-size: 12px;
+  color: color-mix(in srgb, var(--color-text) 50%, transparent);
+}
+
+.mealKcal {
+  margin-left: auto;
+  flex: none;
+  white-space: nowrap;
+  font-size: 14px;
+}
+
+.mealItem {
+  display: flex;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 7px;
+  font-size: 13.5px;
+  color: color-mix(in srgb, var(--color-text) 78%, transparent);
+}
+
+.mealItem span:last-child {
+  flex: none;
+  white-space: nowrap;
+}
+
+.parsed {
+  font-style: italic;
+}
+
+/* Строки «слева-справа» */
+.rows {
+  margin: 0;
+  border-top: 1px solid var(--color-text);
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+  padding: 10px 0;
+  border-bottom: 1px solid var(--color-divider);
+  font-size: 13.5px;
+}
+
+.row dt,
+.row dd {
+  margin: 0;
+}
+
+.rowValue {
+  flex: none;
+  white-space: nowrap;
+}
+
+.tableWrap {
+  overflow-x: auto;
+}
+
+.tableWrap .table {
+  width: 100%;
+}
+
+.right {
+  text-align: right;
+}
+
+.empty {
+  max-width: 620px;
+  padding: 34px 30px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+}
+
+.emptyTitle {
+  font-weight: 400;
+  font-size: 27px;
+  line-height: 1.15;
+  margin: 12px 0 10px;
+}
+
+.emptyBody {
+  margin: 0 0 20px;
+  font-size: 15px;
+  line-height: 1.7;
+  max-width: 46ch;
+}
+
+.chips {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.chip {
+  appearance: none;
+  cursor: pointer;
+  background: transparent;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  padding: 8px 13px;
+  min-height: 38px;
+  font-family: var(--font-body);
+  font-size: 13px;
+  color: inherit;
+}
+
+.chip:hover {
+  background: var(--color-accent-100);
+}
+
+.chip[aria-pressed='true'] {
+  border-color: var(--color-accent);
+  color: var(--color-accent-700);
+}
+
+.summaryText {
+  margin: 0;
+  font-size: 14px;
+  line-height: 1.7;
+  text-align: justify;
+  hyphens: auto;
+}
+
+.score {
+  font-family: var(--font-heading);
+  font-size: 26px;
+  line-height: 1;
+}
+
+@keyframes grow {
+  from { transform: scaleX(0); }
+  to { transform: scaleX(1); }
+}

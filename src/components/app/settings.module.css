@@ -1,0 +1,100 @@
+.section {
+  margin-bottom: var(--space-8);
+}
+
+.sectionLabel {
+  margin: 0 0 6px;
+  padding-bottom: 6px;
+  border-bottom: 1px solid var(--color-divider);
+  color: color-mix(in srgb, var(--color-text) 52%, transparent);
+}
+
+.row {
+  display: flex;
+  gap: 16px;
+  align-items: baseline;
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-divider);
+}
+
+.rowMain {
+  flex: 1;
+  min-width: 0;
+}
+
+.rowLabel {
+  font-size: 14.5px;
+}
+
+.rowHint {
+  display: block;
+  font-size: 12px;
+  margin-top: 3px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-text) 52%, transparent);
+}
+
+.rowValue {
+  font-size: 13.5px;
+  text-align: right;
+  color: color-mix(in srgb, var(--color-text) 75%, transparent);
+}
+
+.current {
+  font-size: 12px;
+  color: var(--color-accent-700);
+}
+
+.row .btn {
+  padding: 6px 12px;
+  font-size: 13px;
+  flex: none;
+}
+
+.paragraph {
+  margin: 0 0 14px;
+  font-size: 13.5px;
+  line-height: 1.65;
+}
+
+.danger {
+  color: #9c3a2c;
+}
+
+:global([data-theme='dark']) .danger {
+  color: #d98b80;
+}
+
+.actions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.done {
+  padding: 14px 16px;
+  border-left: 1px solid var(--color-accent);
+  background: var(--color-accent-100);
+  font-size: 13.5px;
+  line-height: 1.6;
+}
+
+.links {
+  display: flex;
+  flex-direction: column;
+  gap: 9px;
+  font-size: 13.5px;
+}
+
+/* Заголовок раздела с действием справа: «отозвать остальные» относится ко
+   всему списку устройств, а не к отдельной строке. */
+.sectionHead {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.sectionHead .sectionLabel {
+  flex: 1 1 auto;
+}

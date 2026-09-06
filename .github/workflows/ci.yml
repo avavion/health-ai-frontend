@@ -1,0 +1,99 @@
+# Проверка кода на каждом изменении. Выкатка ходит по тем же шагам
+# (см. deploy.yml) — в прод уезжает только то, что здесь позеленело.
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+
+# Отменяем прошлый прогон ветки: смысла держать очередь на промежуточных
+# коммитах нет, а минуты раннеров общие.
+concurrency:
+  group: ci-${{ github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  check:
+    name: Проверки и тесты
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Проверки форматирования здесь нет намеренно: репозиторий писался без
+      # прогона prettier, и включить её сейчас значило бы либо валить сборку,
+      # либо переформатировать всё разом, смешав это с содержательной правкой.
+      # Настройки в .prettierrc уже описывают принятый стиль — когда дойдут
+      # руки прогнать `npm run format` по всему дереву, шаг можно вернуть.
+
+      - name: Типы
+        run: npm run typecheck
+
+      - name: Линтер
+        run: npm run lint
+
+      - name: Модульные тесты
+        run: npm run test:unit
+
+      # Сборка идёт с адресом-заглушкой: страницы приложения ходят в API при
+      # рендере, но все они динамические — на сборке в сеть никто не выходит.
+      - name: Сборка
+        env:
+          API_BASE_URL: http://localhost:8080/v1
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+        run: npm run build
+
+  e2e:
+    name: Сценарии в браузере
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          cache: npm
+
+      - run: npm ci
+
+      # Оба движка: проект mobile в playwright.config.ts описан устройством
+      # iPhone 15, а это WebKit. Ставить один Chromium значило бы гонять
+      # мобильные сценарии в браузере, которого у мобильных пользователей нет.
+      - name: Браузеры Playwright
+        run: npx playwright install --with-deps chromium webkit
+
+      # Сценарии проверяют лендинг и правовые страницы — те, что открываются
+      # без аккаунта. Экраны дневника требуют живого API и проверяются
+      # против стенда, а не в CI.
+      - name: Прогон
+        env:
+          API_BASE_URL: http://localhost:8080/v1
+          NEXT_PUBLIC_SITE_URL: http://localhost:3000
+        run: npm run test:e2e
+
+      - uses: actions/upload-artifact@v4
+        if: failure()
+        with:
+          name: playwright-report
+          path: playwright-report/
+          retention-days: 7
+
+  image:
+    name: Сборка образа
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      # Образ здесь не публикуется — проверяется, что Dockerfile собирается.
+      # Ломается он редко, но узнавать об этом на выкатке дорого.
+      - name: docker build
+        run: docker build --build-arg NEXT_PUBLIC_APP_VERSION=ci .

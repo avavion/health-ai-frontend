@@ -1,0 +1,10 @@
+.next/
+node_modules/
+playwright-report/
+test-results/
+package-lock.json
+
+# Демонстрационные данные и макет свёрстаны колонками руками: prettier
+# разложил бы каждую позицию на восемь строк и сделал таблицу нечитаемой.
+src/lib/mock/diary.ts
+design_handoff_health_ai_classical/

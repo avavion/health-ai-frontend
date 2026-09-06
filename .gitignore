@@ -1,0 +1,16 @@
+node_modules/
+.next/
+out/
+build/
+coverage/
+playwright-report/
+test-results/
+
+# Локальное окружение. В репозитории живёт только .env.example: адреса стендов
+# и почта поддержки различаются от машины к машине.
+.env
+.env.local
+.env.*.local
+
+.DS_Store
+*.tsbuildinfo

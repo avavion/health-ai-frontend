@@ -1,0 +1,9 @@
+.page {
+  padding-block: var(--space-16, 64px);
+}
+
+.title {
+  font-weight: 400;
+  font-size: clamp(28px, 4vw, 40px);
+  margin: var(--space-3) 0 var(--space-4);
+}

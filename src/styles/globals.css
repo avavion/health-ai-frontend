@@ -1,0 +1,54 @@
+@import './classical.css';
+@import './theme-dark.css';
+
+/* Шрифты грузит next/font: подставляем его переменные в токены Classical. */
+:root {
+  --font-heading: var(--font-heading-next), 'Cormorant Garamond', Georgia, serif;
+  --font-body: var(--font-body-next), 'Lora', Georgia, serif;
+}
+
+/* Только то, что не может быть переменной: сбросы и общая раскладка страницы. */
+html,
+body {
+  margin: 0;
+  background: var(--color-bg);
+  color: var(--color-text);
+}
+html {
+  scroll-behavior: smooth;
+}
+* {
+  box-sizing: border-box;
+}
+.container {
+  max-width: 1140px;
+  margin: 0 auto;
+  padding-inline: 24px;
+}
+.kicker {
+  font-size: 11px;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+.tnum {
+  font-feature-settings: 'tnum';
+}
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  overflow: hidden;
+  clip-path: inset(50%);
+}
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation: none !important;
+    transition: none !important;
+  }
+}

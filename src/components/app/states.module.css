@@ -1,0 +1,85 @@
+.offline {
+  display: flex;
+  gap: 12px;
+  align-items: baseline;
+  flex-wrap: wrap;
+  padding: 12px 16px;
+  margin-bottom: var(--space-5);
+  border: 1px solid var(--color-divider);
+  border-left: 2px solid var(--color-accent);
+  background: var(--color-accent-100);
+}
+
+.offlineTag {
+  font-size: 10.5px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--color-accent-700);
+}
+
+.offlineBody {
+  font-size: 13.5px;
+  line-height: 1.55;
+  flex: 1 1 320px;
+}
+
+.error {
+  max-width: 560px;
+  padding: 26px;
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+}
+
+.errorCode {
+  margin: 0;
+  color: var(--color-accent);
+}
+
+.errorTitle {
+  font-weight: 400;
+  font-size: 24px;
+  margin: 10px 0 8px;
+}
+
+.errorBody {
+  margin: 0 0 18px;
+  font-size: 14.5px;
+  line-height: 1.65;
+}
+
+.errorActions {
+  display: flex;
+  gap: 10px;
+  flex-wrap: wrap;
+}
+
+.skeleton {
+  max-width: 900px;
+}
+
+.skeletonHero,
+.skeletonLine {
+  background: var(--color-divider);
+  animation: pulse 1.2s infinite;
+}
+
+.skeletonHero {
+  height: 132px;
+  margin-bottom: 26px;
+}
+
+.skeletonLine {
+  height: 16px;
+  margin-bottom: 12px;
+}
+
+.skeletonLine:nth-child(2) { width: 70%; }
+.skeletonLine:nth-child(3) { width: 84%; animation-delay: 0.12s; }
+.skeletonLine:nth-child(4) { width: 52%; animation-delay: 0.24s; }
+.skeletonLine:nth-child(5) { width: 62%; animation-delay: 0.36s; }
+.skeletonLine:nth-child(6) { width: 44%; animation-delay: 0.48s; }
+
+@keyframes pulse {
+  0%, 100% { opacity: 0.35; }
+  50% { opacity: 0.8; }
+}

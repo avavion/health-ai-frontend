@@ -1,0 +1,143 @@
+.section {
+  border-top: 1px solid var(--color-divider);
+  padding-block: var(--space-16, 64px) 76px;
+}
+
+.inner {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+  gap: var(--space-12, 56px);
+  align-items: start;
+}
+
+.heading {
+  font-weight: 400;
+  font-size: clamp(28px, 3.4vw, 40px);
+  margin: 14px 0 10px;
+}
+
+.lead {
+  font-size: 15.5px;
+  line-height: 1.7;
+  margin: 0 0 var(--space-6);
+  text-align: justify;
+  hyphens: auto;
+}
+
+.facts {
+  margin: 0;
+  border-top: 1px solid var(--color-text);
+}
+
+.fact {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  padding: 12px 0;
+  border-bottom: 1px solid var(--color-divider);
+  font-size: 14px;
+}
+
+.fact dt,
+.fact dd {
+  margin: 0;
+}
+
+.factValue {
+  color: color-mix(in srgb, var(--color-text) 70%, transparent);
+  text-align: right;
+}
+
+.fact:first-child .factValue {
+  color: var(--color-text);
+  border-bottom: 1px solid var(--color-accent);
+}
+
+.hint {
+  font-size: 13px;
+  line-height: 1.6;
+  margin: var(--space-4) 0 0;
+  color: color-mix(in srgb, var(--color-text) 60%, transparent);
+  text-wrap: pretty;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+  padding: var(--space-6);
+  border: 1px solid var(--color-divider);
+  border-radius: var(--radius-md);
+  box-shadow: var(--shadow-sm);
+}
+
+.card .btn {
+  min-height: 46px;
+}
+
+.consent {
+  display: flex;
+  gap: 10px;
+  align-items: flex-start;
+  font-size: 13.5px;
+  line-height: 1.55;
+  cursor: pointer;
+}
+
+.consent input {
+  margin-top: 3px;
+  accent-color: var(--color-accent);
+}
+
+.error {
+  margin: 0;
+  font-size: 13px;
+  color: #9c3a2c;
+}
+
+[data-theme='dark'] .error {
+  color: #d98b80;
+}
+
+.footnote {
+  margin: 0;
+  font-size: 12px;
+  line-height: 1.55;
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
+
+.doneKicker {
+  margin: 0;
+  font-size: 10.5px;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-accent);
+}
+
+.doneTitle {
+  font-weight: 400;
+  font-size: 26px;
+  margin: 0;
+}
+
+.doneBody {
+  margin: 0;
+  font-size: 14.5px;
+  line-height: 1.7;
+}
+
+.ticket {
+  border-bottom: 1px solid var(--color-accent);
+}
+
+.doneRow {
+  display: flex;
+  justify-content: space-between;
+  gap: var(--space-4);
+  margin: 0;
+  font-size: 13.5px;
+}
+
+.doneRow span:first-child {
+  color: color-mix(in srgb, var(--color-text) 55%, transparent);
+}
